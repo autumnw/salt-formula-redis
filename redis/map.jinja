@@ -21,14 +21,15 @@
         }
     },
     'RedHat': {
-        'version': '2.8',
+        'version': '3.0',
         'pkgs': ['redis'],
         'service': 'redis',
-        'conf_dir': '/etc/redis/redis.conf',
+        'conf_dir': '/etc',
         'bind': {
             'address': '127.0.0.1',
             'port': '6379'
-        }
+        },
+        'min_slaves_to_write': '1'
     },
 }, merge=salt['grains.filter_by']({
     'stretch': {
@@ -45,19 +46,21 @@
     },
 }, merge=salt['grains.filter_by']({
     'stretch': {
-        'pkgs': ['redis-sentinel'],
         'service': 'redis-sentinel',
         'sentinel': {
-            'address': '127.0.0.1',
-            'port': '26379'
+            'address': '0.0.0.0',
+            'port': '26379',
+            'down_after_milliseconds': '5000',
+            'cluster_name': 'master_1'
         }
     },
     'xenial': {
-        'pkgs': ['redis-sentinel'],
         'service': 'redis-sentinel',
         'sentinel': {
-            'address': '127.0.0.1',
-            'port': '26379'
+            'address': '0.0.0.0',
+            'port': '26379',
+            'down_after_milliseconds': '5000',
+            'cluster_name': 'master_1'
         }
     },
 }, grain='oscodename', merge=salt['pillar.get']('redis:cluster'))) %}
