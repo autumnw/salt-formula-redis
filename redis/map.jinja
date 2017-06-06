@@ -44,23 +44,26 @@
     'Debian': {
         'enabled': False
     },
-}, merge=salt['grains.filter_by']({
-    'stretch': {
-        'service': 'redis-sentinel',
+    'RedHat': {
+    	'service': 'redis-sentinel',
         'sentinel': {
             'address': '0.0.0.0',
             'port': '26379',
             'down_after_milliseconds': '5000',
             'cluster_name': 'master_1'
         }
-    },
-    'xenial': {
-        'service': 'redis-sentinel',
+    }
+}, merge=salt['grains.filter_by']({
+    'stretch': {
         'sentinel': {
             'address': '0.0.0.0',
-            'port': '26379',
-            'down_after_milliseconds': '5000',
-            'cluster_name': 'master_1'
+            'port': '26379'
+        }
+    },
+    'xenial': {
+        'sentinel': {
+            'address': '0.0.0.0',
+            'port': '26379'
         }
     },
 }, grain='oscodename', merge=salt['pillar.get']('redis:cluster'))) %}
